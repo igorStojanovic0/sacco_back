@@ -7,6 +7,7 @@ import groupRouter from '../routes/group.routes';
 import groupChatRouter from '../routes/groupChat.routes';
 import groupUserFriendRouter from '../routes/groupUserFriend.routes';
 import roleRouter from '../routes/role.routes';
+import saccoRouter from '../routes/sacco.routes';
 import userRouter from '../routes/user.routes';
 
 export default async (app: Application) => {
@@ -46,6 +47,8 @@ export default async (app: Application) => {
     app.use('/api/v1/groupChannel', groupChannelRouter);
     app.use('/api/v1/groupChat', groupChatRouter);
     app.use('/api/v1/groupUserFriend', groupUserFriendRouter);
+
+    app.use('/api/v1/sacco', saccoRouter);
 
     app.use(ErrorHandlerMiddleware);
 
