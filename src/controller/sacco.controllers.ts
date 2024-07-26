@@ -4,7 +4,6 @@ import asyncWrapper from "../middlewares/AsyncWrapper";
 import RoleModel from '../model/role.model';
 import SaccoModel from '../model/sacco.model';
 import UserModel from '../model/user.model';
-import UserGroupModel from '../model/user_group';
 import RoleUserModel from '../model/user_role';
 import UserSaccoModel from '../model/user_sacco';
 import { ValidateToken } from "../utils/password.utils";
@@ -169,20 +168,22 @@ export const joinSacco = asyncWrapper(async (req: Request, res: Response, next: 
     };
     
 
-    const existingGroup = await UserGroupModel.findOne({ user_id: req.body.user_id, group_id: req.body.group_id });
+    const existingGroup = await UserSaccoModel.findOne({ user_id: req.body.user_id, group_id: req.body.group_id, sacco_id: req.body.sacco_id });
     
     if (existingGroup) {
         return res.status(400).json({ message: "You have already joined!" });
     } else {
-        const Role = await RoleModel.findOne({ role_name: "GroupUser"})
+        const Role = await RoleModel.findOne({ role_name: "SaccoUser"})
 
-        const newJoinGroup = await UserGroupModel.create({
+        const newJoinSacco = await UserSaccoModel.create({
             user_id: req?.body?.user_id,
             group_id: req?.body?.group_id,
-            role_id: Role?._id
+            sacco_id: req?.body?.sacco_id,
+            role_id: Role?._id,
+            approved: 0
         });
 
-        if (newJoinGroup) {
+        if (newJoinSacco) {
             const existingRole = await RoleUserModel.findOne({user_id: req.body.user_id, role_id: Role?._id})
             
             if(!existingRole) {
@@ -192,7 +193,7 @@ export const joinSacco = asyncWrapper(async (req: Request, res: Response, next: 
                 })
             }
             
-            res.status(201).json({ message: "newRole added successfully", group: newJoinGroup });
+            res.status(201).json({ message: "successfully", group: newJoinSacco });
         };
     }
 

@@ -8,6 +8,7 @@ import UserGroupModel from "../model/user_group";
 import UserGroupChannelModel from "../model/user_groupChannel";
 import RoleUser from "../model/user_role";
 import { GenerateOTP, sendEmail } from "../utils/notification.utils";
+
 import { GeneratePassword, GenerateSalt, GenerateToken, ValidatePassword, ValidateToken, isTokenValid } from "../utils/password.utils";
 
 export const signUp = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
@@ -44,8 +45,35 @@ export const signUp = asyncWrapper(async (req: Request, res: Response, next: Nex
 
     // Send email
     if (recordedUser) {
-        await sendEmail(req.body.email, "Verify your account", emailMessageBody);
+        
+        const res = await sendEmail(req.body.email, "Verify your account", emailMessageBody);
+        console.log('res', res);
+        
     }
+
+
+    // const transporter = nodemailer.createTransport({
+    //     service: 'gmail',
+    //     auth: {
+    //       user: 'deptop725@gmail', // replace with your email
+    //       pass: '!123qwe!' // replace with your email password
+    //     }
+    //   });
+
+    //   const mailOptions = {
+    //     from: 'deptop725@gmail', // replace with your email
+    //     to: req.body.email,
+    //     subject: 'Verification Code',
+    //     text: `Your verification code is: ${otp}`
+    //   };
+
+    //   try {
+    //     await transporter.sendMail(mailOptions);
+    //     res.status(200).send({ message: 'Verification code sent!', code: otp }); // send code for development/testing purposes
+    //   } catch (error) {
+    //     res.status(500).send({ message: 'Error sending verification code', error });
+    //   }
+    
 
     //save user_role
 

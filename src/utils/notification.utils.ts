@@ -3,11 +3,16 @@ import nodemailer from 'nodemailer';
 // Email
 export const sendEmail = (recipient: string, subject: string, body: string) => {
     const transporter = nodemailer.createTransport({
-        service: process.env.EMAIL_SERVICE,
+        // service: process.env.EMAIL_SERVICE,
+        host: 'smtp.gmail.com',
+        port: 587, // Use 587 for TLS
+        secure: false, // Use true for 465, false for other ports
         auth: {
             user: process.env.EMAIL_USER,
             pass: process.env.EMAIL_PASSWORD
-        }
+        },
+        debug: true,
+        logger: true
     });
 
     const mailOptions = {
