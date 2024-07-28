@@ -46,10 +46,11 @@ export const signUp = asyncWrapper(async (req: Request, res: Response, next: Nex
     // Send email
     if (recordedUser) {
         
-        const res = await sendEmail(req.body.email, "Verify your account", emailMessageBody);
-        console.log('res', res);
-        
+        await sendEmail(req.body.email, "Verify your account", emailMessageBody);
     }
+
+    console.log("OTP", otp);
+    
 
 
     // const transporter = nodemailer.createTransport({
