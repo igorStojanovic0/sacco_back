@@ -1,11 +1,12 @@
 import express from "express";
-import { addSacco, getJoinedSaccoList, getSaccoList, joinSacco } from "../controller/sacco.controllers";
-const roleRouter = express.Router();
+import { addSacco, getJoinedSaccoList, getSaccoList, getSaccoUserList, joinSacco } from "../controller/sacco.controllers";
+const saccoRouter = express.Router();
 
-roleRouter.post('/add', addSacco);
-roleRouter.get('/list', getSaccoList);
-roleRouter.get('/findByUserId', getJoinedSaccoList);
-roleRouter.post('/join', joinSacco);
-// roleRouter.put('/update', roleUpdate);
+saccoRouter.post('/add', addSacco);
+saccoRouter.get('/list', getSaccoList);
+saccoRouter.get('/findByUserId', getJoinedSaccoList);
+saccoRouter.post('/join', joinSacco);
+saccoRouter.get('/findBySaccoId', getSaccoUserList);
+// saccoRouter.put('/update', roleUpdate);
 
-export default roleRouter;
+export default saccoRouter;

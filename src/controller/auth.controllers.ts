@@ -516,8 +516,6 @@ export const getGroupChannelUserList = asyncWrapper(async (req: Request, res: Re
         }
 });
 
-
-
 export const updateUserStatus = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
 
     const { userId, is_active} = req?.body

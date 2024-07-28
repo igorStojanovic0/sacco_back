@@ -6,7 +6,8 @@ import SaccoModel from '../model/sacco.model';
 import UserModel from '../model/user.model';
 import RoleUserModel from '../model/user_role';
 import UserSaccoModel from '../model/user_sacco';
-import { ValidateToken } from "../utils/password.utils";
+import { ValidateToken, isTokenValid } from "../utils/password.utils";
+
 export const addSacco = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
 
     const isTokenValid = await ValidateToken(req);
@@ -208,3 +209,93 @@ export const groupUpdate = asyncWrapper(async (req: Request, res: Response, next
 export const deleteGroup = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
     
 });
+
+export const getSaccoUserList = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
+
+    const authToken = req.get('Authorization');
+    
+    if (!authToken?.split(' ')[1]) {
+        return res.status(401).json({ message: "Access denied!" });
+    }
+    
+    const isValid = await isTokenValid(req);
+    if (!isValid) {
+        return res.status(401).json({ message: "Access denied!" });
+    }
+
+    const { saccoId } = req?.query
+
+    if(saccoId) {
+        try {
+            if (typeof saccoId !== 'string' || !mongoose.Types.ObjectId.isValid(saccoId)) {
+                throw new Error('Invalid saccoId: must be a valid ObjectId string');
+            }
+
+            const result = await UserSaccoModel.aggregate([
+                {
+                    $match: { sacco_id: new mongoose.Types.ObjectId(saccoId) }
+                },
+                {
+                    $lookup: {
+                        from: 'users', // Collection name in MongoDB
+                        localField: 'user_id',
+                        foreignField: '_id',
+                        as: 'userDetails'
+                    }
+                },
+                {
+                    $unwind: '$userDetails'
+                },
+                {
+                    $lookup: {
+                        from: 'roles',
+                        localField: 'role_id',
+                        foreignField: '_id',
+                        as: 'roleInfo'
+                    }
+                },
+                { $unwind: '$roleInfo' },
+                {
+                    $project: {
+                        user_id: '$userDetails._id',
+                        title: '$userDetails.title',
+                        surName: '$userDetails.surName',
+                        givenName: '$userDetails.givenName',
+                        otherNames: '$userDetails.otherNames',
+                        photograph: '$userDetails.photograph',
+                        gender: '$userDetails.gender',
+                        tribe: '$userDetails.tribe',
+                        religion: '$userDetails.religion',
+                        placeOfBirth: '$userDetails.placeOfBirth',
+                        currentParish: '$userDetails.currentParish',
+                        birthday: '$userDetails.birthday',
+                        nationalIDNumber: '$userDetails.nationalIDNumber',
+                        nationalIDPhoto: '$userDetails.nationalIDPhoto',
+                        email: '$userDetails.email',
+                        phone: '$userDetails.phone',
+                        homeAddress: '$userDetails.homeAddress',
+                        homeLocation: '$userDetails.homeLocation',
+                        districtOfBirth: '$userDetails.districtOfBirth',
+                        birthParish: '$userDetails.birthParish',
+                        birthVillage: '$userDetails.birthVillage',
+                        birthHome: '$userDetails.birthHome',
+                        maritalStatus: '$userDetails.maritalStatus',
+                        profession: '$userDetails.profession',
+                        placeOfWorkAddress: '$userDetails.placeOfWorkAddress',
+                        is_active: '$userDetails.is_active',
+                        userID: '$userDetails.userID',
+                        del_falg: '$userDetails.del_falg',
+                        role_name: '$roleInfo.role_name',
+                        sacco_id: '$sacco_id',
+                        approved: '$approved'
+                    }
+                }
+            ]);
+
+            res.status(201).json({ message: "successfully", saccoUserList: result });
+
+        } catch (err) {
+            return res.status(400).json({ message: "Failed" });
+        }
+    }
+})
