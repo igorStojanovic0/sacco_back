@@ -49,10 +49,6 @@ export const signUp = asyncWrapper(async (req: Request, res: Response, next: Nex
         await sendEmail(req.body.email, "Verify your account", emailMessageBody);
     }
 
-    console.log("OTP", otp);
-    
-
-
     // const transporter = nodemailer.createTransport({
     //     service: 'gmail',
     //     auth: {
@@ -100,6 +96,7 @@ export const signIn = asyncWrapper(async (req: Request, res: Response, next: Nex
         return res.status(400).json({ message: "Invalid email or password" });
     };
 
+    
     if (!existingUser.verified) {
         return res.status(400).json({ message: "Please verify your account first" });
     }
@@ -131,6 +128,8 @@ export const getUserProfile = asyncWrapper(async (req: Request, res: Response, n
     //     return res.status(401).json({ message: "Access denied!" });
     // }
 
+    console.log("req.user", req.user);
+    
     const existingUser = await UserModel.findOne({ email: req.user?.email });
 
     if (!existingUser) {

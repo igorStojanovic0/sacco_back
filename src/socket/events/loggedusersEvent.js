@@ -5,7 +5,6 @@ const loggedusersUtils = require('../utils/loggedusersUtils');
 exports.authorization = (io, socket, data) => {
   const userId = data.userId;
   const userInfo = _.get( io, `connectedUsers.userlist.${userId}` );
-  // console.log('authorization', data, userInfo)
   if ( !userInfo ) {
     socket.emit( CONSTS.LOGGEDUSERS_CONSTS.S2C_LOGGEDUSERS_UNAUTHORIZED, {} );
     return;

@@ -33,7 +33,6 @@ const getLoggedusersInfo = ( io ) => {
       idleMin = 1;
     }
     const userId = socket.user || 'unknown';
-    // console.log('get logged user info', socket.socket.id, socket.pageUrl)
     resultArray.push({
       userInfo: _.get( io, `connectedUsers.userlist.${userId}.userInfo` ),
       idleMin: idleMin,
@@ -61,7 +60,6 @@ exports.emitLoggeduserInfo = ( io ) => {
   _.map( io.connectedUsers.sockets, socket => {
     // const crrSocketType = _.get( socket, 'info.type' ) || '';
 		// if ( crrSocketType === CONSTS.SOCKET_TYPES.LOGGEDUSERS && socket.socket && socket.socket.emit ) {
-    //   // console.log('emit logged user info. data=', data)
     //   socket.socket.emit( CONSTS.LOGGEDUSERS_CONSTS.S2C_LOGGEDUSERS_USERS, data );
     // }
     if ( socket.socket ) {

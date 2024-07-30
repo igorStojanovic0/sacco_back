@@ -13,7 +13,7 @@ exports = module.exports = function (io) {
 	// }, 60 * 1000); // 1min
 	io.of(CONSTS.SOCKET).on('connect', (socket) => {
 		authInit(io, socket);
-		// console.log('socket', socket);
+		
 		chatInit(io, socket);
 
 	// 	loggedusersInit(io, socket);

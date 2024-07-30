@@ -129,7 +129,6 @@ export const getGroupFriendList = asyncWrapper(async (req: Request, res: Respons
 
 export const getGroupFriendMsg = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
     const { roomId, groupId } = req.body
-    console.log('groupId', roomId);
         
     try {
         const results = await GroupChatRoom.aggregate([
