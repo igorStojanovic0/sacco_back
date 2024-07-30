@@ -110,7 +110,7 @@ export const signIn = asyncWrapper(async (req: Request, res: Response, next: Nex
 
     // Send response
     res
-        .cookie("access-token", token, { httpOnly: true, expires: new Date(Date.now() + 3600000) })
+        .cookie("access-token", token, { httpOnly: true, expires: new Date(Date.now() + 3600000), domain: `.${process.env.CLIENT_URL}`, path: '/', sameSite: 'lax' })
         .status(200)
         .json({ message: "Sign in successful", token, result: rest });
 });
@@ -145,7 +145,7 @@ export const getUserProfile = asyncWrapper(async (req: Request, res: Response, n
     const { password: hashedPassword, salt,otp, otpExpiryTime,verified, ...rest } = existingUser._doc;
 
     res
-        .cookie("access-token", token, { httpOnly: true, expires: new Date(Date.now() + 3600000) })
+        .cookie("access-token", token, { httpOnly: true, expires: new Date(Date.now() + 3600000), domain: `.${process.env.CLIENT_URL}`, path: '/', sameSite: 'lax'   })
         .status(200)
         .json(rest);
 });
