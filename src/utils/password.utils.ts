@@ -75,17 +75,46 @@ interface DecodedPayload extends UserPayload{
 }
 
 export const isTokenValid = async (req: Request) => {
-    const signature = req.get('Authorization')?.toString();
-    if (signature) {
-        const payload = jwt.verify(signature.split(' ')[1], SECRET_KEY as string) as DecodedPayload;
+    // const signature = req.get('Authorization')?.toString();
+    // if (signature) {
+    //     const payload = jwt.verify(signature.split(' ')[1], SECRET_KEY as string) as DecodedPayload;
+    //     req.user = payload;
+    //     const now = Date.now() / 1000; // Convert to seconds for consistency
+
+    //     if (payload.exp < now) {
+    //         return false;
+    //     }
+
+    //     return true;
+    // }
+    const authorizationHeader = req.get('Authorization');
+    
+    if (!authorizationHeader) {
+        console.error('Authorization header is missing');
+        return false;
+    }
+
+    const token = authorizationHeader.split(' ')[1];
+    
+    if (!token) {
+        console.error('Token is missing in the Authorization header');
+        return false;
+    }
+
+    try {
+        const payload = jwt.verify(token, SECRET_KEY as string) as DecodedPayload;
         req.user = payload;
         const now = Date.now() / 1000; // Convert to seconds for consistency
 
         if (payload.exp < now) {
+            console.error('Token has expired');
             return false;
         }
 
         return true;
+    } catch (error) {
+        // console.error('Token validation error:', error);
+        return false;
     }
 }
 
