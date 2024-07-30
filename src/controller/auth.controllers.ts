@@ -116,18 +116,18 @@ export const signIn = asyncWrapper(async (req: Request, res: Response, next: Nex
 });
 
 export const getUserProfile = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
-    const authToken = req.get('Authorization');
+    // const authToken = req.get('Authorization');
     
-    if (!authToken?.split(' ')[1]) {
-        return res.status(401).json({ message: "Access denied!" });
-    }
+    // if (!authToken?.split(' ')[1]) {
+    //     return res.status(401).json({ message: "Access denied!" });
+    // }
     
     const isValid = await isTokenValid(req);
     if (!isValid) {
         return res.status(401).json({ message: "Access denied!" });
     }
 
-    console.log("req.user", authToken);
+    console.log("req.user", isValid);
     
     const existingUser = await UserModel.findOne({ email: req.user?.email });
 
