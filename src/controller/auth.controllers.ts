@@ -120,36 +120,36 @@ export const signIn = asyncWrapper(async (req: Request, res: Response, next: Nex
 });
 
 export const getUserProfile = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
-    const authToken = req.get('Authorization');
+    // const authToken = req.get('Authorization');
     
-    if (!authToken?.split(' ')[1]) {
-        return res.status(401).json({ message: "Access denied!" });
-    }
+    // if (!authToken?.split(' ')[1]) {
+    //     return res.status(401).json({ message: "Access denied!" });
+    // }
     
-    const isValid = await isTokenValid(req);
-    if (!isValid) {
-        return res.status(401).json({ message: "Access denied!" });
-    }
+    // const isValid = await isTokenValid(req);
+    // if (!isValid) {
+    //     return res.status(401).json({ message: "Access denied!" });
+    // }
 
-    const existingUser = await UserModel.findOne({ email: req.user?.email });
+    // const existingUser = await UserModel.findOne({ email: req.user?.email });
 
-    if (!existingUser) {
-        return res.status(400).json({ message: "User not found" });
-    }
+    // if (!existingUser) {
+    //     return res.status(400).json({ message: "User not found" });
+    // }
     
-    const token = await GenerateToken({
-        _id: existingUser._id,
-        email: existingUser.email,
-        verified: existingUser.verified
-    });
+    // const token = await GenerateToken({
+    //     _id: existingUser._id,
+    //     email: existingUser.email,
+    //     verified: existingUser.verified
+    // });
 
-    const { password: hashedPassword, salt,otp, otpExpiryTime,verified, ...rest } = existingUser._doc;
+    // const { password: hashedPassword, salt,otp, otpExpiryTime,verified, ...rest } = existingUser._doc;
 
-    // Send response
-    res
-        .cookie("access-token", token, { httpOnly: true, expires: new Date(Date.now() + 3600000) })
-        .status(200)
-        .json(rest);
+    // res
+    //     .cookie("access-token", token, { httpOnly: true, expires: new Date(Date.now() + 3600000) })
+    //     .status(200)
+    //     .json(rest);
+    res.status(200).json({ message: "Success"})
 });
 
 
