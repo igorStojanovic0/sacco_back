@@ -1,9 +1,8 @@
 import express from 'express';
 import { forgotPassword, getAllUsers, getGroupChannelUserList, getGroupUserList, getUserProfile, regenerateOTP, resetPassword, signIn, signUp, updateAccount, updateUserRole, updateUserStatus, verifyOTP, verifyToken } from '../controller';
 import { validateEmail, validateOTP, validatePasswordReset, validateUpdateUserInfo, validateUserSignIn, validateUserSignUp } from '../utils/userValidation';
+
 const userRouter = express.Router();
-
-
 
 userRouter.post('/signup', validateUserSignUp, signUp);
 userRouter.post('/signin', validateUserSignIn, signIn);

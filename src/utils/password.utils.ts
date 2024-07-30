@@ -1,8 +1,8 @@
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 import { Request } from 'express';
-import { UserPayload } from '../dto/auth.dto';
+import jwt from 'jsonwebtoken';
 import { SECRET_KEY } from '../config';
+import { UserPayload } from '../dto/auth.dto';
 
 declare global {
     namespace Express {
@@ -57,7 +57,7 @@ export const GenerateToken = async (payload: UserPayload) => {
  * @returns true | false
  */
 export const ValidateToken = async (req: Request) => {
-    const signature = req.get('Authorization');
+    const signature = req.get('Authorization')?.toString();
     if (signature) {
         const payload = jwt.verify(signature.split(' ')[1], SECRET_KEY as string) as UserPayload;
         req.user = payload;
@@ -75,7 +75,7 @@ interface DecodedPayload extends UserPayload{
 }
 
 export const isTokenValid = async (req: Request) => {
-    const signature = req.get('Authorization');
+    const signature = req.get('Authorization')?.toString();;
     if (signature) {
         const payload = jwt.verify(signature.split(' ')[1], SECRET_KEY as string) as DecodedPayload;
         req.user = payload;
@@ -90,7 +90,7 @@ export const isTokenValid = async (req: Request) => {
 }
 
 export const ValidateAdmin = async (req: Request) => {
-    const signature = req.get('Authorization');
+    const signature = req.get('Authorization')?.toString();;
     if (signature) {
         const payload = jwt.verify(signature.split(' ')[1], SECRET_KEY as string) as UserPayload;
         req.user = payload;

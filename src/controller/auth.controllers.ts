@@ -96,7 +96,6 @@ export const signIn = asyncWrapper(async (req: Request, res: Response, next: Nex
         return res.status(400).json({ message: "Invalid email or password" });
     };
 
-    
     if (!existingUser.verified) {
         return res.status(400).json({ message: "Please verify your account first" });
     }
@@ -113,7 +112,7 @@ export const signIn = asyncWrapper(async (req: Request, res: Response, next: Nex
     res
         .cookie("access-token", token, { httpOnly: true, expires: new Date(Date.now() + 3600000) })
         .status(200)
-        .json({ message: "Sign in successful", token });
+        .json({ message: "Sign in successful", token, result: rest });
 });
 
 export const getUserProfile = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
@@ -123,12 +122,12 @@ export const getUserProfile = asyncWrapper(async (req: Request, res: Response, n
         return res.status(401).json({ message: "Access denied!" });
     }
     
-    // const isValid = await isTokenValid(req);
-    // if (!isValid) {
-    //     return res.status(401).json({ message: "Access denied!" });
-    // }
+    const isValid = await isTokenValid(req);
+    if (!isValid) {
+        return res.status(401).json({ message: "Access denied!" });
+    }
 
-    console.log("req.user", req.user);
+    console.log("req.user", req);
     
     const existingUser = await UserModel.findOne({ email: req.user?.email });
 
@@ -142,7 +141,7 @@ export const getUserProfile = asyncWrapper(async (req: Request, res: Response, n
         verified: existingUser.verified
     });
 
-    const { password: hashedPassword, salt, otp, otpExpiryTime,verified, ...rest } = existingUser._doc;
+    const { password: hashedPassword, salt,otp, otpExpiryTime,verified, ...rest } = existingUser._doc;
 
     res
         .cookie("access-token", token, { httpOnly: true, expires: new Date(Date.now() + 3600000) })

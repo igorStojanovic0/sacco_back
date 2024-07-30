@@ -16,6 +16,7 @@ exports.compareActivityInfos = (src1, src2, orderKey) => {
 	const ordered2 = orderKey? _.orderBy(src2, user=>_.get( user, orderKey ), 'asc') : src2;
 	const str1 = JSON.stringify(ordered1);
 	const str2 = JSON.stringify(ordered2);
+	// console.log('compare', str1, '----', str2);
 	if (str1 != str2)
 		return true;
 	return false;
@@ -32,6 +33,7 @@ exports.parseToken = (token) => {
 
 exports.sendError = (socket, type, detail, err) => {
 	if (socket) {
+		console.log('send error', type, detail, err);
 		socket.emit(CONSTS.CHAT_CONSTS.S2C_CHAT_ERROR, {
 			type,
 			detail,

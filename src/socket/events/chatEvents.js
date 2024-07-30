@@ -161,6 +161,8 @@ exports.groupEdit = (io, socket, data) => {
         const users_added = chatUtils.getGroupAddedUsers(groupUsers, updatedGroupUsers);
         const users_removed = chatUtils.getGroupRemovedUsers(groupUsers, updatedGroupUsers);
 
+        // console.log('user_added', users_added);
+        // console.log('user_removed', users_removed);
         // prepare new messages
         let newMessages = [];
         _.map(users_added, (uid) => {
@@ -378,6 +380,7 @@ exports.roomCreate = (io, socket, data) => {
   const groupId = data.groupId;
   const users = chatUtils.getRoomUsersFromReceived(data.users, userId);
 
+  // console.log('room create', data);
   async.waterfall([
     (callback) => { // ----- Step1. load rooms in that group
       ChatRoom
@@ -471,6 +474,7 @@ exports.roomEdit = (io, socket, data) => {
   const groupId = data.groupId;
   const users = chatUtils.getRoomUsersFromReceived(data.users, userId);
 
+  // console.log('room create', data);
   async.waterfall([
     (callback) => { // ----- Step1. load rooms in that group
       ChatRoom
@@ -677,6 +681,7 @@ exports.roomLoadMoreMessages = (io, socket, data) => {
       const endPos = msgLength - loadedCount;
       const offset = msgLength - messages.length;
 
+      // console.log('msg', msgLength, startPos, endPos);
       if (startPos < endPos) {
         const loadedMsgs = messages.slice(startPos - offset, endPos - offset);
         socket.emit(CONSTS.CHAT_CONSTS.S2C_CHAT_ROOM_LOAD_MOREMESSAGES, {
@@ -1434,6 +1439,7 @@ exports.groupFriendMessageNew = async (io, socket, data) => {
 
 exports.addFriend = async (io, socket, data) => {
 
+  console.log("data", data);
 
   const userId = data?.userId
   const friendId = data?.friendId
@@ -1443,6 +1449,7 @@ exports.addFriend = async (io, socket, data) => {
   const friend = await UserFriendModel.find({ userId: userId, friendId: friendId, groupId: groupId })
 
   if(friend?.length > 0) {
+    console.log('friend', friend);
     try {
       const results = await GroupChatRoom.aggregate([
           {
