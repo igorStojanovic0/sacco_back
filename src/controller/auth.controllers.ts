@@ -123,9 +123,9 @@ export const getUserProfile = asyncWrapper(async (req: Request, res: Response, n
     // }
     
     const isValid = await isTokenValid(req);
-    if (!isValid) {
-        return res.status(401).json({ message: "Access denied!" });
-    }
+    // if (!isValid) {
+    //     return res.status(401).json({ message: "Access denied!" });
+    // }
 
     console.log("req.user", isValid);
     

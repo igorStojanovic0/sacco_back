@@ -113,7 +113,7 @@ export const isTokenValid = async (req: Request) => {
 
         return true;
     } catch (error) {
-        // console.error('Token validation error:', error);
+        console.error('Token validation error:', error);
         return false;
     }
 }
