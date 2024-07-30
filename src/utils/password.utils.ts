@@ -46,7 +46,7 @@ export const ValidatePassword = async (enteredPassword: string, savedPassword: s
  * @param payload an object that contains some information about the logged in user.
  * @returns signature string of text (a jwt token)
  */
-export const GenerateToken = async (payload: UserPayload) => {
+export const GenerateToken = (payload: UserPayload): string => {
     return jwt.sign(payload, SECRET_KEY as string, { expiresIn: "1d" }) // Other possible time of expiration formats are: 30m, 1h, 1d,...
 };
 
@@ -75,7 +75,7 @@ interface DecodedPayload extends UserPayload{
 }
 
 export const isTokenValid = async (req: Request) => {
-    const signature = req.get('Authorization')?.toString();;
+    const signature = req.get('Authorization')?.toString();
     if (signature) {
         const payload = jwt.verify(signature.split(' ')[1], SECRET_KEY as string) as DecodedPayload;
         req.user = payload;

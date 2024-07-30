@@ -127,7 +127,7 @@ export const getUserProfile = asyncWrapper(async (req: Request, res: Response, n
         return res.status(401).json({ message: "Access denied!" });
     }
 
-    console.log("req.user", req);
+    console.log("req.user", authToken);
     
     const existingUser = await UserModel.findOne({ email: req.user?.email });
 
