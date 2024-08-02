@@ -31,7 +31,8 @@ export default async (app: Application) => {
     });
 //Photograph upload
     app.post('/file', upload.single('file'), (req, res) => {
-        // Access uploaded file via req.file
+        console.log("upload file", req?.file);
+        
         res.send({ fileName: req?.file?.filename });
     });
 //IDphoto upload

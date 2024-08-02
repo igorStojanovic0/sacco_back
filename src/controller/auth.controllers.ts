@@ -117,18 +117,17 @@ export const signIn = asyncWrapper(async (req: Request, res: Response, next: Nex
 
 export const getUserProfile = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
     const authToken = req.get('Authorization');
-    console.log("authToken", authToken);
     
-    // if (!authToken?.split(' ')[1]) {
-    //     return res.status(401).json({ message: "Access denied!" });
-    // }
+    if (!authToken?.split(' ')[1]) {
+        return res.status(401).json({ message: "Access denied!" });
+    }
     
     const isValid = await isTokenValid(req);
     if (!isValid) {
         return res.status(401).json({ message: "Access denied!" });
     }
 
-    console.log("req.user", isValid);
+    console.log("req.user", authToken);
     
     const existingUser = await UserModel.findOne({ email: req.user?.email });
 
@@ -145,7 +144,7 @@ export const getUserProfile = asyncWrapper(async (req: Request, res: Response, n
     const { password: hashedPassword, salt,otp, otpExpiryTime,verified, ...rest } = existingUser._doc;
 
     res
-        .cookie("access-token", token, { httpOnly: true, expires: new Date(Date.now() + 3600000), domain: `.${process.env.CLIENT_URL}`, path: '/', sameSite: 'lax'   })
+        .cookie("access-token", token, { httpOnly: true, expires: new Date(Date.now() + 3600000), domain: `.${process.env.CLIENT_URL}`, path: '/', sameSite: 'lax' })
         .status(200)
         .json(rest);
 });

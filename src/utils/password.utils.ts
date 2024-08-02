@@ -57,7 +57,7 @@ export const GenerateToken = (payload: UserPayload): string => {
  * @returns true | false
  */
 export const ValidateToken = async (req: Request) => {
-    const signature = req.get('Authorization')?.toString();
+    const signature = req.get('Authorization')
     if (signature) {
         const payload = jwt.verify(signature.split(' ')[1], SECRET_KEY as string) as UserPayload;
         req.user = payload;
@@ -75,7 +75,7 @@ interface DecodedPayload extends UserPayload{
 }
 
 export const isTokenValid = async (req: Request) => {
-    // const signature = req.get('Authorization')?.toString();
+    // const signature = req.get('Authorization');
     // if (signature) {
     //     const payload = jwt.verify(signature.split(' ')[1], SECRET_KEY as string) as DecodedPayload;
     //     req.user = payload;
@@ -113,13 +113,13 @@ export const isTokenValid = async (req: Request) => {
 
         return true;
     } catch (error) {
-        console.error('Token validation error:', error);
+        // console.error('Token validation error:', error);
         return false;
     }
 }
 
 export const ValidateAdmin = async (req: Request) => {
-    const signature = req.get('Authorization')?.toString();;
+    const signature = req.get('Authorization');
     if (signature) {
         const payload = jwt.verify(signature.split(' ')[1], SECRET_KEY as string) as UserPayload;
         req.user = payload;
